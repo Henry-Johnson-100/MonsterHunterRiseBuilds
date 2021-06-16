@@ -38,7 +38,7 @@ public class JDBCArmorDAO implements ArmorDAO {
 
     private Armor mapRowToArmor(SqlRowSet row) { //will have to add support to get skills somewhere here or elsewhere
         List<Integer> tempDecoSlots = Arrays.asList(row.getInt("lv1_slots"),row.getInt("lv2_slots"),row.getInt("lv3_slots"));
-        List<Integer> tempResistances = Arrays.asList(row.getInt("fire_res"),row.getInt("water_res"),row.getInt("thunder_res"),row.getInt("ice_res"),row.getInt("dragon_re"));
+        List<Integer> tempResistances = Arrays.asList(row.getInt("fire_res"),row.getInt("water_res"),row.getInt("thunder_res"),row.getInt("ice_res"),row.getInt("dragon_res"));
         return new Armor(row.getLong("armor_id"),row.getString("armor_name"),row.getInt("base_defense"),tempDecoSlots,tempResistances);
     }
 }

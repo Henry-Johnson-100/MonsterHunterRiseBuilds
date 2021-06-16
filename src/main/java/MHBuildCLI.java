@@ -23,6 +23,9 @@ public class MHBuildCLI {
         armorDAO = new JDBCArmorDAO(ds);
         skillDAO = new JDBCSkillDAO(ds);
         decoDAO = new JDBCDecorationDAO(ds);
+
+        System.out.println(armorDAO.getArmorFromName("Kaiser Crown").getArmorName());
+
     }
 
 }
