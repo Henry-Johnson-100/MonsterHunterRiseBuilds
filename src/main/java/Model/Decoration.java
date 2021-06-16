@@ -28,4 +28,14 @@ public class Decoration {
     public int getSlotLevel() {
         return slotLevel;
     }
+
+    @Override
+    public String toString() {
+        return "Decoration{" +
+                "decoId=" + decoId +
+                ", skillId=" + skillId +
+                ", decoName='" + decoName + '\'' +
+                ", slotLevel=" + slotLevel +
+                '}';
+    }
 }

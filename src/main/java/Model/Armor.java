@@ -71,7 +71,16 @@ public class Armor {
         return decorations;
     }
 
-    public void setDecorations(List<Decoration> decorations) {
-        this.decorations = decorations;
+    @Override
+    public String toString() {
+        return "Armor{" +
+                "armorId=" + armorId +
+                ", armorName='" + armorName + '\'' +
+                ", baseDefense=" + baseDefense +
+                ", decorationSlots=" + decorationSlots +
+                ", resistances=" + resistances +
+                ", skills=" + skills +
+                ", decorations=" + decorations +
+                '}';
     }
 }

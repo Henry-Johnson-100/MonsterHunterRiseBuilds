@@ -52,4 +52,15 @@ public class Skill {
         }
         this.skillLevel--;
     }
+
+    @Override
+    public String toString() {
+        return "Skill{" +
+                "skillId=" + skillId +
+                ", skillName='" + skillName + '\'' +
+                ", skillDescription='" + skillDescription + '\'' +
+                ", skillLevel=" + skillLevel +
+                ", maxSkillLevel=" + maxSkillLevel +
+                '}';
+    }
 }
