@@ -10,7 +10,7 @@ import java.util.List;
 
 public class JDBCSkillDAO implements SkillDAO{
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public JDBCSkillDAO (DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
