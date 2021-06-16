@@ -5,13 +5,14 @@ import java.util.List;
 public class Armor {
     private Long armorId;
     private String armorName;
+    private String pieceType;
     private int baseDefense;
     private List<Integer> decorationSlots;
     private List<Integer> resistances;
     private List<Skill> skills;
     private List<Decoration> decorations;
 
-    public Armor(Long armorId, String armorName, int baseDefense, List<Integer> decorationSlots, List<Integer> resistances) {
+    public Armor(Long armorId, String armorName,String pieceType, int baseDefense, List<Integer> decorationSlots, List<Integer> resistances) {
         this.armorId = armorId;
         this.armorName = armorName;
         this.baseDefense = baseDefense;
@@ -69,6 +70,10 @@ public class Armor {
 
     public List<Decoration> getDecorations() {
         return decorations;
+    }
+
+    public String getPieceType() {
+        return pieceType;
     }
 
     @Override
