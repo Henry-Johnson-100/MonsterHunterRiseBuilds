@@ -2,6 +2,8 @@ import DAO.*;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MHBuildCLI {
 
@@ -24,7 +26,11 @@ public class MHBuildCLI {
         skillDAO = new JDBCSkillDAO(ds);
         decoDAO = new JDBCDecorationDAO(ds);
 
-        System.out.println(armorDAO.getArmorFromName("Kaiser Crown").getArmorName());
+        //I will be shocked if this works
+        SetBuilder testBuilder = new SetBuilder(armorDAO,skillDAO,decoDAO,
+        new ArrayList<String>(Arrays.asList("Critical Eye","Weakness Exploit","Critical Boost")));
+        testBuilder.generateArmorSet();
+        System.out.println(testBuilder.toString());
 
     }
 
