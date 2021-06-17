@@ -67,6 +67,10 @@ public class JDBCSkillDAO implements SkillDAO{
     }
 
     public Skill mapRowToSkill(SqlRowSet row) {
-        return new Skill(row.getLong("skill_id"),row.getString("skill_name"),row.getString("skill_description"),row.getInt("max_level"));
+        return new Skill(
+                row.getLong("skill_id"),
+                row.getString("skill_name"),
+                row.getString("skill_description"),
+                row.getInt("max_level"));
     }
 }

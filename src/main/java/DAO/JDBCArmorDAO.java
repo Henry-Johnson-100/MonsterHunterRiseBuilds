@@ -40,7 +40,7 @@ public class JDBCArmorDAO implements ArmorDAO {
     @Override
     public Armor getOptimalArmorFromSkills(List<Skill> skillsList, String additionalWhereCompiledSql) {
         StringBuilder sqlBuild = new StringBuilder();
-        Long armorId = -1L;
+        Long armorId = -1L; //TODO finish this one up
         return getArmorFromId(armorId); //two queries here, not sure about this, may want change it later
     }
 
