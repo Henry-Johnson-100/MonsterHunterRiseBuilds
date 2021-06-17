@@ -37,11 +37,34 @@ public class JDBCArmorDAO implements ArmorDAO {
         return null;
     }
 
+    private String getOptimalArmorQuery(List<Skill> searchSkills, String[] excludePieceTypes) {
+        StringBuilder sql = new StringBuilder("SELECT oar.armor_id, ar.armor_name FROM optimal_armor(");
+        for (int i = 0; i < searchSkills.size(); i++) {
+            if (i == searchSkills.size() - 1) {
+                sql.append("?");
+                continue; //should break out of the loop anyways
+            }
+            sql.append("?,");
+        }
+        sql.append(") AS oar JOIN armor ar ON aor.armor_id = ar.armor_id WHERE oar.armor_piece_type NOT IN (");
+        for (int i = 0; i < excludePieceTypes.length; i++) {
+            sql.append(excludePieceTypes[i]);
+            if (i < excludePieceTypes.length - 1) {
+                sql.append(",");
+            }
+        }
+        sql.append(");");
+        return sql.toString();
+    }
+
     @Override
-    public Armor getOptimalArmorFromSkills(List<Skill> skillsList, String additionalWhereCompiledSql) {
-        StringBuilder sqlBuild = new StringBuilder();
-        Long armorId = -1L; //TODO finish this one up
-        return getArmorFromId(armorId); //two queries here, not sure about this, may want change it later
+    public Armor getOptimalArmorFromSkills(List<Skill> searchSkills, String[] excludePieceTypes) {//TODO ensure this method is working
+        String sql = getOptimalArmorQuery(searchSkills,excludePieceTypes);
+        SqlRowSet result = this.jdbcTemplate.queryForRowSet(sql, searchSkills); //TODO fix this to appropriately parameterize searchSkills
+        if (result.next()) {
+            return getArmorFromId(result.getLong("armor_id"));
+        }
+        return null; //two queries here, not sure about this, may want change it later
     }
 
     private Armor mapRowToArmor(SqlRowSet row) { //will have to add support to get skills somewhere here or elsewhere
