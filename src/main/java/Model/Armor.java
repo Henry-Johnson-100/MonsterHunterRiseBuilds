@@ -1,6 +1,6 @@
 package Model;
 
-import java.util.List;
+import java.util.*;
 
 public class Armor {
     private Long armorId;
@@ -10,13 +10,14 @@ public class Armor {
     private List<Integer> decorationSlots;
     private List<Integer> resistances;
     private List<Skill> skills;
+    private Map<String, Skill> skillMap;
     private List<Decoration> decorations;
 
     public Armor(Long armorId, String armorName,String pieceType, int baseDefense, List<Integer> decorationSlots, List<Integer> resistances) {
         this.armorId = armorId;
         this.armorName = armorName;
         this.baseDefense = baseDefense;
-        this.decorationSlots = decorationSlots;
+        this.decorationSlots = decorationSlots; //TODO make a method to generate a deco map depending on the number of slots
         this.resistances = resistances;
     }
 
@@ -60,12 +61,14 @@ public class Armor {
         this.resistances = resistances;
     }
 
-    public List<Skill> getSkills() {
-        return skills;
+    public Map<String,Skill> getSkills() {
+        return skillMap;
     }
 
     public void setSkills(List<Skill> skills) {
-        this.skills = skills;
+        for (Skill elem : skills) {
+            this.skillMap.put(elem.getSkillName(), elem);
+        }
     }
 
     public List<Decoration> getDecorations() {
