@@ -16,9 +16,11 @@ public class Armor {
     public Armor(Long armorId, String armorName,String pieceType, int baseDefense, List<Integer> decorationSlots, List<Integer> resistances) {
         this.armorId = armorId;
         this.armorName = armorName;
+        this.pieceType = pieceType;
         this.baseDefense = baseDefense;
         this.decorationSlots = decorationSlots; //TODO make a method to generate a deco map depending on the number of slots
         this.resistances = resistances;
+        this.skillMap = new HashMap<>();
     }
 
     public Long getArmorId() {
@@ -87,7 +89,7 @@ public class Armor {
                 ", baseDefense=" + baseDefense +
                 ", decorationSlots=" + decorationSlots +
                 ", resistances=" + resistances +
-                ", skills=" + skills +
+                ", skills=" + skillMap +
                 ", decorations=" + decorations +
                 '}';
     }
