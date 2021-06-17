@@ -58,8 +58,8 @@ public class JDBCArmorDAO implements ArmorDAO {
     }
 
     @Override
-    public Armor getOptimalArmorFromSkills(String[] excludePieceTypes, Skill... searchSkills) {//TODO ensure this method is working
-        String sql = getOptimalArmorQuery(Arrays.asList(searchSkills),excludePieceTypes);
+    public Armor getOptimalArmorFromSkills(List<Skill> searchSkills, String[] excludePieceTypes) {//TODO ensure this method is working
+        String sql = getOptimalArmorQuery(searchSkills,excludePieceTypes);
         SqlRowSet result = this.jdbcTemplate.queryForRowSet(sql, searchSkills); //TODO fix this to appropriately parameterize searchSkills
         if (result.next()) {
             return getArmorFromId(result.getLong("armor_id"));
