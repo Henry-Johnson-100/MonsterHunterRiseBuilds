@@ -1,10 +1,8 @@
 import DAO.ArmorDAO;
 import DAO.DecorationDAO;
-import DAO.JDBCArmorDAO;
 import DAO.SkillDAO;
 import Model.Armor;
 import Model.Skill;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import java.util.*;
 
@@ -49,9 +47,8 @@ public class SetBuilder {
         return typeArray;
     }
 
-    private boolean ifMaxLevelRemoveSkillFromSearch(Skill searchSkill) {
+    private boolean isMaxLevel(Skill searchSkill) {
         if (searchSkill.getSkillLevel() == searchSkill.getMaxSkillLevel()) {
-            this.skillSearchList.remove(searchSkill);
             return true;
         }
         return false;
@@ -63,13 +60,17 @@ public class SetBuilder {
      * @param armorSkillMap
      */
     private void updateSearchSkillLevels(Map<String, Skill> armorSkillMap) {
+        List<Skill> removeList = new ArrayList<>();
         for (Skill searchSkill : this.skillSearchList) {
             if (!armorSkillMap.containsKey(searchSkill.getSkillName())) {
                 continue;
             }
             searchSkill.setSkillLevel(searchSkill.getSkillLevel() + armorSkillMap.get(searchSkill.getSkillName()).getSkillLevel());
-            ifMaxLevelRemoveSkillFromSearch(searchSkill);
+            if(isMaxLevel(searchSkill)) {
+                removeList.add(searchSkill);
+            }
         }
+        this.skillSearchList.removeAll(removeList);
     }
 
     private void assignArmorPiece(Armor armorPiece) {
@@ -91,7 +92,7 @@ public class SetBuilder {
     //TODO work on stored procedures. Need to think about adding 'AND armor_piece_type NOT IN []' and 'AND ...' (skill level + current searchSkill level < max Skill Level) to fully optimize the searches
 
     public void generateArmorSet() { //TODO think about it if this is void or if it should return a set object
-        while (this.getOccupiedPieceTypes().size() <= 5) {
+        while (this.getOccupiedPieceTypes().size() < 5) {
             this.searchForArmorPiece(); //if all goes well this will return a distinct piece to fit in a slot, will have to run some calculations in between queries though so this is really a big oversimplification
         }
     }
