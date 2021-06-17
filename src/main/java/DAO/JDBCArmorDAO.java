@@ -6,9 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class JDBCArmorDAO implements ArmorDAO {
     private final JdbcTemplate jdbcTemplate;
@@ -20,7 +18,7 @@ public class JDBCArmorDAO implements ArmorDAO {
     @Override
     public Armor getArmorFromId(Long armorId) {
         String sql = "SELECT * FROM armor ar JOIN has_piece hp ON ar.armor_id = hp.armor_id WHERE ar.armor_id = ?;";
-        SqlRowSet result = this.jdbcTemplate.queryForRowSet(sql,armorId);
+        SqlRowSet result = this.jdbcTemplate.queryForRowSet(sql, armorId);
         if (result.next()) {
             return mapRowToArmor(result);
         }
@@ -46,19 +44,30 @@ public class JDBCArmorDAO implements ArmorDAO {
             }
             sql.append("?,");
         }
-        sql.append(") AS oar JOIN armor ar ON aor.armor_id = ar.armor_id WHERE oar.armor_piece_type NOT IN (");
+        sql.append(") AS oar JOIN armor ar ON oar.armor_id = ar.armor_id");
+        boolean anyExclude = false;
+        StringBuilder whereSubBuilder = new StringBuilder(" WHERE oar.armor_piece_type NOT IN (");
+        List<String> pieceTypeToSplit = new ArrayList<>();
         for (int i = 0; i < excludePieceTypes.length; i++) {
-            sql.append(excludePieceTypes[i]);
-            if (i < excludePieceTypes.length - 1) {
-                sql.append(",");
+            if (excludePieceTypes[i].length() == 0 || excludePieceTypes[i].isEmpty()) {
+                continue;
+            } else {
+                pieceTypeToSplit.add("'" + excludePieceTypes[i] + "'");
+                anyExclude = true;
             }
         }
-        sql.append(");");
+        if (anyExclude) {
+            whereSubBuilder.append(String.join(",",pieceTypeToSplit));
+            sql.append(whereSubBuilder);
+            sql.append(");");
+        } else {
+            sql.append(";");
+        }
         return sql.toString();
     }
 
     private SqlRowSet optimalArmorVarArgs(String sql, List<Skill> searchSkills) { //makes me want to throw up
-        return switch(searchSkills.size()) {
+        return switch (searchSkills.size()) {
             case 1 -> this.jdbcTemplate.queryForRowSet(sql, searchSkills.get(0).getSkillName());
             case 2 -> this.jdbcTemplate.queryForRowSet(sql, searchSkills.get(0).getSkillName(), searchSkills.get(1).getSkillName());
             case 3 -> this.jdbcTemplate.queryForRowSet(sql, searchSkills.get(0).getSkillName(), searchSkills.get(1).getSkillName(), searchSkills.get(2).getSkillName());
@@ -76,7 +85,7 @@ public class JDBCArmorDAO implements ArmorDAO {
 
     @Override
     public Armor getOptimalArmorFromSkills(List<Skill> searchSkills, String[] excludePieceTypes) {//TODO ensure this method is working
-        String sql = getOptimalArmorQuery(searchSkills,excludePieceTypes);
+        String sql = getOptimalArmorQuery(searchSkills, excludePieceTypes);
         SqlRowSet result = optimalArmorVarArgs(sql, searchSkills);
         if (result.next()) {
             return getArmorFromId(result.getLong("armor_id"));
