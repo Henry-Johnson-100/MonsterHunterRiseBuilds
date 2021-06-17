@@ -57,10 +57,27 @@ public class JDBCArmorDAO implements ArmorDAO {
         return sql.toString();
     }
 
+    private SqlRowSet optimalArmorVarArgs(String sql, List<Skill> searchSkills) { //makes me want to throw up
+        return switch(searchSkills.size()) {
+            case 1 -> this.jdbcTemplate.queryForRowSet(sql, searchSkills.get(0).getSkillName());
+            case 2 -> this.jdbcTemplate.queryForRowSet(sql, searchSkills.get(0).getSkillName(), searchSkills.get(1).getSkillName());
+            case 3 -> this.jdbcTemplate.queryForRowSet(sql, searchSkills.get(0).getSkillName(), searchSkills.get(1).getSkillName(), searchSkills.get(2).getSkillName());
+            case 4 -> this.jdbcTemplate.queryForRowSet(sql, searchSkills.get(0).getSkillName(), searchSkills.get(1).getSkillName(), searchSkills.get(2).getSkillName(),
+                    searchSkills.get(3).getSkillName());
+            case 5 -> this.jdbcTemplate.queryForRowSet(sql, searchSkills.get(0).getSkillName(), searchSkills.get(1).getSkillName(), searchSkills.get(2).getSkillName(),
+                    searchSkills.get(3).getSkillName(), searchSkills.get(4).getSkillName());
+            case 6 -> this.jdbcTemplate.queryForRowSet(sql, searchSkills.get(0).getSkillName(), searchSkills.get(1).getSkillName(), searchSkills.get(2).getSkillName(),
+                    searchSkills.get(3).getSkillName(), searchSkills.get(4).getSkillName(), searchSkills.get(5).getSkillName());
+            case 7 -> this.jdbcTemplate.queryForRowSet(sql, searchSkills.get(0).getSkillName(), searchSkills.get(1).getSkillName(), searchSkills.get(2).getSkillName(),
+                    searchSkills.get(3).getSkillName(), searchSkills.get(4).getSkillName(), searchSkills.get(5).getSkillName(), searchSkills.get(6).getSkillName());
+            default -> this.jdbcTemplate.queryForRowSet("SELECT NULL"); //TODO think of something better to put here
+        };
+    }
+
     @Override
     public Armor getOptimalArmorFromSkills(List<Skill> searchSkills, String[] excludePieceTypes) {//TODO ensure this method is working
         String sql = getOptimalArmorQuery(searchSkills,excludePieceTypes);
-        SqlRowSet result = this.jdbcTemplate.queryForRowSet(sql, searchSkills); //TODO fix this to appropriately parameterize searchSkills
+        SqlRowSet result = optimalArmorVarArgs(sql, searchSkills);
         if (result.next()) {
             return getArmorFromId(result.getLong("armor_id"));
         }
