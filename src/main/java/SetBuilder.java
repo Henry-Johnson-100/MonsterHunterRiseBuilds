@@ -1,5 +1,6 @@
 import DAO.ArmorDAO;
 import DAO.DecorationDAO;
+import DAO.JDBCArmorDAO;
 import DAO.SkillDAO;
 import Model.Armor;
 import Model.Skill;
@@ -13,7 +14,7 @@ public class SetBuilder {
     private Armor arms;
     private Armor waist;
     private Armor legs;
-    private List<Skill> skillSearchList;
+    private final List<Skill> skillSearchList;
     private final ArmorDAO armorDAO;
     private final SkillDAO skillDAO;
     private final DecorationDAO decoDAO;
@@ -41,7 +42,7 @@ public class SetBuilder {
 
     private List<String> getOccupiedPieceTypes() {
         List<String> occupiedPieceTypes = new ArrayList<>();
-        for (Armor piece : new Armor[]{this.head, this.chest, this.arms, this.waist, this.legs}) {
+        for (Armor piece : new Armor[]{this.head, this.chest, this.arms, this.waist, this.legs}) { //TODO make this a hashset instead of doing this gross
             if (piece != null) {
                 occupiedPieceTypes.add(piece.getPieceType());
             }
@@ -60,7 +61,18 @@ public class SetBuilder {
     }
 
     private void searchForArmorPiece() {
-
+        //TODO finish this method, and probably the stored procedures that go before it
+        Long armorId = -1L;
+        Armor newPiece = this.armorDAO.getArmorFromId(armorId);
+        newPiece.setSkills(this.skillDAO.getSkillsFromArmorId(armorId));
+        this.assignArmorPiece(newPiece);
     }
+
+    public void generateArmorSet() { //TODO think about it if this is void or if it should return a set object
+        while (this.getOccupiedPieceTypes().size() <= 5) {
+            this.searchForArmorPiece(); //if all goes well this will return a distinct piece to fit in a slot, will have to run some calculations in between queries though so this is really a big oversimplification
+        }
+    }
+
 
 }
