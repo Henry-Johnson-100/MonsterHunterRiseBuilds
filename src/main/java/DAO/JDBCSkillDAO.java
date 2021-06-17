@@ -39,7 +39,7 @@ public class JDBCSkillDAO implements SkillDAO{
     @Override
     public List<Skill> getSkillsFromArmorId(Long armorId) {
         List<Skill> skillList = new ArrayList<>();
-        String sql = "SELECT skill_id, skill_name, skill_level, max_skill_level, skill_description " +
+        String sql = "SELECT skill_id, skill_name, skill_level, max_level, skill_description " +
                 "FROM armor_with_skill WHERE armor_piece_id = ?;";
         SqlRowSet result = this.jdbcTemplate.queryForRowSet(sql,armorId);
         Skill tempSkill;
@@ -54,7 +54,7 @@ public class JDBCSkillDAO implements SkillDAO{
     @Override
     public List<Skill> getSkillsFromArmorName(String armorName) {
         List<Skill> skillList = new ArrayList<>();
-        String sql = "SELECT skill_id, skill_name, skill_level, max_skill_level, skill_description " +
+        String sql = "SELECT skill_id, skill_name, skill_level, max_level, skill_description " +
                 "FROM armor_with_skill WHERE armor_name LIKE ?;";
         SqlRowSet result = this.jdbcTemplate.queryForRowSet(sql,"%" + armorName + "%");
         Skill tempSkill;
