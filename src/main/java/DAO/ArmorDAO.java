@@ -11,6 +11,6 @@ public interface ArmorDAO {
 
     public Armor getArmorFromName(String armorName);
 
-    public Armor getOptimalArmorFromSkills(List<Skill> searchSkills, String[] excludePieceTypes);
+    public Armor getOptimalArmorFromSkills(String[] excludePieceTypes, Skill... searchSkills);
 
 }
