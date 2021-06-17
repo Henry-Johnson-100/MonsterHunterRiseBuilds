@@ -24,27 +24,6 @@ public class SetBuilder {
         this.skillSearchList = getSkillSearchListFromNames(skillNames);
     }
 
-    private String getQuery() {
-        StringBuilder sql = new StringBuilder("SELECT oar.armor_id, ar.armor_name FROM optimal_armor(");
-        for (int i = 0; i < this.skillSearchList.size(); i++) {
-            if (i == this.skillSearchList.size() - 1) {
-                sql.append("?");
-                continue; //should break out of the loop anyways
-            }
-            sql.append("?,");
-        }
-        sql.append(") AS oar JOIN armor ar ON aor.armor_id = ar.armor_id WHERE oar.armor_piece_type NOT IN (");
-        String[] occupiedPieceTypes = (String[]) this.getOccupiedPieceTypes().toArray(); //this feels weird but I think it works
-        for (int i = 0; i < occupiedPieceTypes.length; i++) {
-            sql.append(occupiedPieceTypes[i]);
-            if (i < occupiedPieceTypes.length - 1) {
-                sql.append(",");
-            }
-        }
-        sql.append(");");
-        return sql.toString();
-    }
-
     private List<Skill> getSkillSearchListFromNames(List<String> skillNames) {
         List<Skill> tempSkillList = new ArrayList<>();
         Skill tempSkill;
@@ -58,6 +37,16 @@ public class SetBuilder {
 
     private Set<String> getOccupiedPieceTypes() {
         return new HashSet<>(this.setMap.keySet());
+    }
+
+    private String[] getOccupiedPieceTypeArray() {
+        String[] typeArray = new String[]{"", "", "", "", ""};
+        int i = 0;
+        for (String type: this.getOccupiedPieceTypes()) {
+            typeArray[i] = type;
+            i++;
+        }
+        return typeArray;
     }
 
     private boolean ifMaxLevelRemoveSkillFromSearch(Skill searchSkill) {
@@ -94,11 +83,8 @@ public class SetBuilder {
     }
 
     private void searchForArmorPiece() {
-        //TODO finish this method, and probably the stored procedures that go before it
-        String sql = getQuery();
-        Long armorId = -1L;
-        Armor newPiece = this.armorDAO.getArmorFromId(armorId);
-        newPiece.setSkills(this.skillDAO.getSkillsFromArmorId(armorId));
+        Armor newPiece = this.armorDAO.getOptimalArmorFromSkills(this.skillSearchList,getOccupiedPieceTypeArray());
+        newPiece.setSkills(this.skillDAO.getSkillsFromArmorId(newPiece.getArmorId()));
         this.assignArmorPiece(newPiece);
         updateSearchSkillLevels(newPiece.getSkills());
     }
@@ -110,5 +96,10 @@ public class SetBuilder {
         }
     }
 
-
+    @Override
+    public String toString() {
+        return "SetBuilder{" +
+                "setMap=" + setMap +
+                '}';
+    }
 }
