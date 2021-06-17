@@ -35,8 +35,24 @@ public class Skill {
         return maxSkillLevel;
     }
 
-    public void setSkillLevel(int skillLevel) {
+    /**
+     *Set a skill's level. Does not allow skills to be set outside of their maximum range.
+     * @param skillLevel -> The level to set the skill to.
+     * @return -> 0 if the skill level is set appropriately.
+     *          -> 1 if the skill level is set too high.
+     *          -> -1 if the skill level is set too low.
+     */
+    public int setSkillLevel(int skillLevel) {
         this.skillLevel = skillLevel;
+        if (this.skillLevel > this.maxSkillLevel) {
+            this.skillLevel = this.maxSkillLevel;
+            return 1;
+        }
+        if (this.skillLevel < 0) {
+            this.skillLevel = 0;
+            return -1;
+        }
+        return 0;
     }
 
     public void incrSkillLevel() {
