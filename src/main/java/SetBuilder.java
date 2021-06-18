@@ -99,8 +99,10 @@ public class SetBuilder {
 
     @Override
     public String toString() {
-        return "SetBuilder{" +
-                "setMap=" + setMap +
-                '}';
+        StringBuilder returnStr = new StringBuilder();
+        for (Map.Entry<String, Armor> kvp : this.setMap.entrySet()) {
+            returnStr.append(kvp.getValue().toString()).append("\n");
+        }
+        return returnStr.toString();
     }
 }
