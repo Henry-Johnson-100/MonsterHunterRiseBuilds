@@ -27,7 +27,7 @@ public class MHBuildCLI {
         decoDAO = new JDBCDecorationDAO(ds);
 
         //I will be shocked if this works
-        SetBuilder testBuilder = new SetBuilder(armorDAO,skillDAO,decoDAO,
+        SetBuilder testBuilder = new SetBuilder(armorDAO,skillDAO,decoDAO,Arrays.asList("Rapid Morph","Attack Boost","Evade Extender","Evade Window"));
         //This causes an overlevel TODO fix this
         //new ArrayList<String>(Arrays.asList("Rapid Morph","Attack Boost","Evade Extender","Evade Window")));
         //testBuilder.generateArmorSet();
