@@ -28,9 +28,10 @@ public class MHBuildCLI {
 
         //I will be shocked if this works
         SetBuilder testBuilder = new SetBuilder(armorDAO,skillDAO,decoDAO,
-        new ArrayList<String>(Arrays.asList("Critical Eye","Weakness Exploit","Critical Boost")));
-        testBuilder.generateArmorSet();
-        System.out.println(testBuilder.toString());
+        //This causes an overlevel TODO fix this
+        //new ArrayList<String>(Arrays.asList("Rapid Morph","Attack Boost","Evade Extender","Evade Window")));
+        //testBuilder.generateArmorSet();
+        //System.out.println(testBuilder.toString());
 
     }
 
