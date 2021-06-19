@@ -81,12 +81,20 @@ public class Armor {
         return pieceType;
     }
 
+    public String skillMapToString() {
+        StringBuilder returnStr = new StringBuilder("Skills:\n");
+        for (Map.Entry<String,Skill> kvp:this.skillMap.entrySet()) {
+            returnStr.append(kvp.getValue().toString()).append("\n");
+        }
+        return returnStr.toString();
+    }
+
     @Override
     public String toString() {
         return "Name: " + this.armorName + "\n" +
                 "Base Defense: " + this.baseDefense + "\n" +
                 "Decoration Slots: " + this.decorationSlots.toString() + "\n" +
-                "Skills: " + String.join("\n\t", this.skillMap.toString()) + "\n" +
-                "Set decorations: " + String.join("\n\t", this.decorations.toString()) + "\n";
+                skillMapToString() + "\n"
+                ;
     }
 }

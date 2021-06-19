@@ -71,12 +71,8 @@ public class Skill {
 
     @Override
     public String toString() {
-        return "Skill{" +
-                "skillId=" + skillId +
-                ", skillName='" + skillName + '\'' +
-                ", skillDescription='" + skillDescription + '\'' +
-                ", skillLevel=" + skillLevel +
-                ", maxSkillLevel=" + maxSkillLevel +
-                '}';
+        return "Name: " + this.skillName + "\n" +
+                "Description: " + this.skillDescription + "\n" +
+                "Skill Level: " + this.skillLevel + "/" + this.maxSkillLevel + "\n";
     }
 }
