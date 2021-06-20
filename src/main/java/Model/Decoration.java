@@ -30,6 +30,14 @@ public class Decoration {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+        return ((Decoration) obj).getDecoName().equals(this.getDecoName());
+    } //have no idea if this will actually work
+
+    @Override
     public String toString() {
         return "Decoration{" +
                 "decoId=" + decoId +
