@@ -3,6 +3,7 @@ package Util;
 import Model.Decoration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +68,7 @@ public class DecoStruct {
         List<Decoration> decoList;
         while (decoLevel >= decoLevelFloor) {//Want to remove decorations from the highest level slots first
             decoList = this.getLvDecoList(decoLevel);
-            if (decoList.contains(deco)) { //TODO write a .equals() @override method in the Decoration model
+            if (decoList.contains(deco)) {
                 decoList.remove(deco);
                 decoList.add(null);
                 return true;
@@ -79,6 +80,17 @@ public class DecoStruct {
 
     public boolean unset(int slotLevel) { //Unset the first deco in a given slot, indiscriminately. Returns true if deco was removed, false if no decos were removed.
         return this.getLvDecoList(slotLevel).remove(0) == null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder returnStr = new StringBuilder("Decorations");
+        for (List<Decoration> decoList : Arrays.asList(this.lv1Decos,this.lv2Decos,this.lv3Decos)) {
+            for (Decoration deco : decoList) {
+                returnStr.append("\n\t").append(deco.getDecoName()).append(" lv:").append(deco.getSlotLevel());
+            }
+        }
+        return returnStr.toString();
     }
 
     private List<Decoration> initLvDecoList(int emptySlots) {//The size of any given lvDecoList should always == lvSlots, so they are filled with null values if not Decorations
