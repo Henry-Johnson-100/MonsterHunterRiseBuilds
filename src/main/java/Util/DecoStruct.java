@@ -40,25 +40,31 @@ public class DecoStruct {
     public boolean set(Decoration deco) {
         int decoLevel = deco.getSlotLevel();
         List<Decoration> decoList = new ArrayList<>(); //I think since lists are mutable I can do this
+
         while (decoLevel <= MAX_DECO_LEVEL) {
             decoList = this.getLvDecoList(decoLevel);
+
             if (decoList.contains(null)) {
                 decoList.remove(null);
                 decoList.add(deco);
                 return true;
             }
+
             decoLevel++;
         }
+
         return false; //deco could not be added
     }
 
     public boolean set(Decoration deco, int slotLevel) {
         List<Decoration> decoList = this.getLvDecoList(slotLevel);
+
         if (decoList.contains(null)) {
             decoList.remove(null);
             decoList.add(deco);
             return true;
         }
+
         return false; //deco could not be added
     }
 
@@ -66,15 +72,19 @@ public class DecoStruct {
         int decoLevelFloor = deco.getSlotLevel();
         int decoLevel = MAX_DECO_LEVEL;
         List<Decoration> decoList;
+
         while (decoLevel >= decoLevelFloor) {//Want to remove decorations from the highest level slots first
             decoList = this.getLvDecoList(decoLevel);
+
             if (decoList.contains(deco)) {
                 decoList.remove(deco);
                 decoList.add(null);
                 return true;
             }
+
             decoLevel--;
         }
+
         return false;
     }
 
@@ -84,20 +94,34 @@ public class DecoStruct {
 
     @Override
     public String toString() {
-        StringBuilder returnStr = new StringBuilder("Decorations");
-        for (List<Decoration> decoList : Arrays.asList(this.lv1Decos,this.lv2Decos,this.lv3Decos)) {
+        StringBuilder returnStr = new StringBuilder("Decorations").append("\n");
+        String tempDecoName;
+
+        for (List<Decoration> decoList : Arrays.asList(this.lv1Decos, this.lv2Decos, this.lv3Decos)) {
+
             for (Decoration deco : decoList) {
-                returnStr.append("\n\t").append(deco.getDecoName()).append(" lv:").append(deco.getSlotLevel());
+
+                if (deco == null) {
+                    tempDecoName = "_____";//Don't really like this but w/e for now
+                } else {
+                    tempDecoName = deco.getDecoName();
+                }
+
+                returnStr.append("\n\t").append(tempDecoName);
             }
+
         }
+
         return returnStr.toString();
     }
 
     private List<Decoration> initLvDecoList(int emptySlots) {//The size of any given lvDecoList should always == lvSlots, so they are filled with null values if not Decorations
         List<Decoration> tempDecoList = new ArrayList<>();
+
         for (int i = 0; i < emptySlots; i++) {
             tempDecoList.add(null);
         }
+
         return tempDecoList;
     }
 
