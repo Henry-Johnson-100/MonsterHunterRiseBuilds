@@ -9,9 +9,9 @@ public class Armor {
     private int baseDefense;
     private List<Integer> decorationSlots;
     private List<Integer> resistances;
-    private List<Skill> skills;
     private Map<String, Skill> skillMap;
     private List<Decoration> decorations;
+    private Map<String,List<String>> decoMap;
 
     public Armor(Long armorId, String armorName,String pieceType, int baseDefense, List<Integer> decorationSlots, List<Integer> resistances) {
         this.armorId = armorId;
@@ -51,10 +51,6 @@ public class Armor {
         return decorationSlots;
     }
 
-    public void setDecorationSlots(List<Integer> decorationSlots) {
-        this.decorationSlots = decorationSlots;
-    }
-
     public List<Integer> getResistances() {
         return resistances;
     }
@@ -67,10 +63,14 @@ public class Armor {
         return skillMap;
     }
 
-    public void setSkills(List<Skill> skills) {
+    public void initSkills(List<Skill> skills) {
         for (Skill elem : skills) {
             this.skillMap.put(elem.getSkillName(), elem);
         }
+    }
+
+    private void initDecoSlots(List<Integer> decoSlots) {
+        //TODO once I decide the structure of deco
     }
 
     public List<Decoration> getDecorations() {

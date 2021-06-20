@@ -85,7 +85,7 @@ public class SetBuilder {
 
     private void searchForArmorPiece() {
         Armor newPiece = this.armorDAO.getOptimalArmorFromSkills(this.skillSearchList,getOccupiedPieceTypeArray());
-        newPiece.setSkills(this.skillDAO.getSkillsFromArmorId(newPiece.getArmorId()));
+        newPiece.initSkills(this.skillDAO.getSkillsFromArmorId(newPiece.getArmorId()));
         this.assignArmorPiece(newPiece);
         updateSearchSkillLevels(newPiece.getSkills());
     }
