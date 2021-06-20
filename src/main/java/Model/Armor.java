@@ -36,7 +36,6 @@ public class Armor {
         return baseDefense;
     }
 
-
     public List<Integer> getResistances() {
         return resistances;
     }
@@ -82,7 +81,7 @@ public class Armor {
     private String skillMapToString() {
         StringBuilder returnStr = new StringBuilder("Skills:\n");
         for (Map.Entry<String, Skill> kvp : this.skillMap.entrySet()) {
-            returnStr.append(kvp.getValue().toString()).append("\n");
+            returnStr.append(kvp.getValue().toString());
         }
         return returnStr.toString();
     }
@@ -91,7 +90,8 @@ public class Armor {
     public String toString() {
         return "Name: " + this.armorName + "\n" +
                 "Base Defense: " + this.baseDefense + "\n" +
-                skillMapToString() + "\n"
+                skillMapToString() + "\n" +
+                this.decorations.toString() + "\n"
                 ;
     }
 }
