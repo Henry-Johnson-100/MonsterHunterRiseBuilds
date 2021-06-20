@@ -52,6 +52,7 @@ public class Armor {
         for (Skill elem : skills) {
             this.skillMap.put(elem.getSkillName(), elem);
         }
+
     }
 
     public String getPieceType() {
@@ -67,7 +68,7 @@ public class Armor {
     }
 
     public boolean setDeco(Decoration deco, int slotLevel) {
-        return this.decorations.set(deco,slotLevel);
+        return this.decorations.set(deco, slotLevel);
     }
 
     public boolean unsetDeco(Decoration deco) {
@@ -80,9 +81,11 @@ public class Armor {
 
     private String skillMapToString() {
         StringBuilder returnStr = new StringBuilder("Skills:\n");
+
         for (Map.Entry<String, Skill> kvp : this.skillMap.entrySet()) {
             returnStr.append(kvp.getValue().toString());
         }
+
         return returnStr.toString();
     }
 

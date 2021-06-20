@@ -13,7 +13,6 @@ public class SetBuilder {
     private final SkillDAO skillDAO;
     private final DecorationDAO decoDAO;
 
-
     public SetBuilder(ArmorDAO armorDAO, SkillDAO skillDAO, DecorationDAO decoDAO, List<String> skillNames) {
         this.setMap = new HashMap<>();
         this.armorDAO = armorDAO;
@@ -22,14 +21,22 @@ public class SetBuilder {
         this.skillSearchList = getSkillSearchListFromNames(skillNames);
     }
 
+    public void generateArmorSet() { //TODO think about it if this is void or if it should return a set object
+        while (this.getOccupiedPieceTypes().size() < 5) {
+            this.searchForArmorPiece(); //if all goes well this will return a distinct piece to fit in a slot, will have to run some calculations in between queries though so this is really a big oversimplification
+        }
+    }
+
     private List<Skill> getSkillSearchListFromNames(List<String> skillNames) {
         List<Skill> tempSkillList = new ArrayList<>();
         Skill tempSkill;
+
         for (String skillName : skillNames) {
             tempSkill = this.skillDAO.getSkillFromName(skillName);
             tempSkill.setSkillLevel(0); //initialize all search skill levels to zero
             tempSkillList.add(tempSkill);
         }
+
         return tempSkillList;
     }
 
@@ -40,36 +47,38 @@ public class SetBuilder {
     private String[] getOccupiedPieceTypeArray() {
         String[] typeArray = new String[]{"", "", "", "", ""};
         int i = 0;
-        for (String type: this.getOccupiedPieceTypes()) {
+
+        for (String type : this.getOccupiedPieceTypes()) {
             typeArray[i] = type;
             i++;
         }
-        return typeArray;
-    }
 
-    private boolean isMaxLevel(Skill searchSkill) {
-        if (searchSkill.getSkillLevel() == searchSkill.getMaxSkillLevel()) {
-            return true;
-        }
-        return false;
+        return typeArray;
     }
 
     /**
      * For the skills in the list skillSearchList, updates their levels with the armor's skills passed as an arg.
      * Will remove a skill from skillSearchList if its maximum skill is reached or exceeded.
+     *
      * @param armorSkillMap
      */
     private void updateSearchSkillLevels(Map<String, Skill> armorSkillMap) {
         List<Skill> removeList = new ArrayList<>();
+
         for (Skill searchSkill : this.skillSearchList) {
+
             if (!armorSkillMap.containsKey(searchSkill.getSkillName())) {
                 continue;
             }
+
             searchSkill.setSkillLevel(searchSkill.getSkillLevel() + armorSkillMap.get(searchSkill.getSkillName()).getSkillLevel());
-            if(isMaxLevel(searchSkill)) {
+
+            if (searchSkill.isMaxLevel()) {
                 removeList.add(searchSkill);
             }
+
         }
+
         this.skillSearchList.removeAll(removeList);
     }
 
@@ -84,25 +93,21 @@ public class SetBuilder {
     }
 
     private void searchForArmorPiece() {
-        Armor newPiece = this.armorDAO.getOptimalArmorFromSkills(this.skillSearchList,getOccupiedPieceTypeArray());
+        Armor newPiece = this.armorDAO.getOptimalArmorFromSkills(this.skillSearchList, getOccupiedPieceTypeArray());
         newPiece.initSkills(this.skillDAO.getSkillsFromArmorId(newPiece.getArmorId()));
         this.assignArmorPiece(newPiece);
         updateSearchSkillLevels(newPiece.getSkills());
     }
     //TODO work on stored procedures. Need to think about adding 'AND armor_piece_type NOT IN []' and 'AND ...' (skill level + current searchSkill level < max Skill Level) to fully optimize the searches
 
-    public void generateArmorSet() { //TODO think about it if this is void or if it should return a set object
-        while (this.getOccupiedPieceTypes().size() < 5) {
-            this.searchForArmorPiece(); //if all goes well this will return a distinct piece to fit in a slot, will have to run some calculations in between queries though so this is really a big oversimplification
-        }
-    }
-
     @Override
     public String toString() {
         StringBuilder returnStr = new StringBuilder();
+
         for (Map.Entry<String, Armor> kvp : this.setMap.entrySet()) {
             returnStr.append(kvp.getValue().toString()).append("\n");
         }
+
         return returnStr.toString();
     }
 }

@@ -69,6 +69,10 @@ public class Skill {
         this.skillLevel--;
     }
 
+    public boolean isMaxLevel() {
+        return this.skillLevel == this.maxSkillLevel;
+    }
+
     @Override
     public String toString() {
         return "Name: " + this.skillName + "\n" +
